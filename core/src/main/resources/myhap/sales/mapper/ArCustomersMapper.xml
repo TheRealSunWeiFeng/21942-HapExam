@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="myhap.sales.mapper.ArCustomersMapper">
+    <resultMap id="BaseResultMap" type="myhap.sales.dto.ArCustomers">
+        <result column="CUSTOMER_ID" property="customerId" jdbcType="DECIMAL" />
+        <result column="CUSTOMER_NUMBER" property="customerNumber" jdbcType="VARCHAR" />
+        <result column="CUSTOMER_NAME" property="customerName" jdbcType="VARCHAR" />
+        <result column="COMPANY_ID" property="companyId" jdbcType="DECIMAL" />
+        <result column="ENABLED_FLAG" property="enabledFlag" jdbcType="VARCHAR" />
+    </resultMap>
+    <select id="selectCustomerWithOutRequestId" resultMap="BaseResultMap">
+        SELECT
+            CUSTOMER_ID,
+            customer_number,
+            customer_name,
+            company_id,
+            ENABLED_FLAG
+        FROM
+            hap_ar_customers
+        WHERE customer_id =#{customerId}
+    </select>
+
+    <select id="selectLovCustomers" resultMap="BaseResultMap">
+        SELECT
+        CUSTOMER_ID,
+        customer_number,
+        customer_name,
+        company_id,
+        ENABLED_FLAG
+        FROM
+        hap_ar_customers
+        WHERE 1=1
+        <if test="customerId!=null and !''.equals(customerId) ">
+            AND CUSTOMER_ID=#{customerId}
+        </if>
+
+        <if test="customerName!=null and !''.equals(customerName) ">
+            AND customer_name=#{customerName}
+        </if>
+        <if test="companyId!=null and !''.equals(companyId) ">
+            AND company_id=#{companyId}
+        </if>
+
+    </select>
+
+</mapper>

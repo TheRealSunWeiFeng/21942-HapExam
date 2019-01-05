@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="myhap.sales.mapper.OmOrderLinesMapper">
+    <resultMap id="BaseResultMap" type="myhap.sales.dto.OmOrderLines">
+        <result column="LINE_ID" property="lineId" jdbcType="DECIMAL" />
+        <result column="HEADER_ID" property="headerId" jdbcType="DECIMAL" />
+        <result column="LINE_NUMBER" property="lineNumber" jdbcType="DECIMAL" />
+        <result column="INVENTORY_ITEM_ID" property="inventoryItemId" jdbcType="DECIMAL" />
+        <result column="ORDERD_QUANTITY" property="orderdQuantity" jdbcType="DECIMAL" />
+        <result column="ORDER_QUANTITY_UOM" property="orderQuantityUom" jdbcType="VARCHAR" />
+        <result column="UNIT_SELLING_PRICE" property="unitSellingPrice" jdbcType="DECIMAL" />
+        <result column="DESCRIPTION" property="description" jdbcType="VARCHAR" />
+        <result column="COMPANY_ID" property="companyId" jdbcType="DECIMAL" />
+        <result column="ADDITION1" property="addition1" jdbcType="VARCHAR" />
+        <result column="ADDITION2" property="addition2" jdbcType="VARCHAR" />
+        <result column="ADDITION3" property="addition3" jdbcType="VARCHAR" />
+        <result column="ADDITION4" property="addition4" jdbcType="VARCHAR" />
+        <result column="ADDITION5" property="addition5" jdbcType="VARCHAR" />
+    </resultMap>
+    <select id="selectWithForgeinKey" resultMap="BaseResultMap">
+        SELECT
+        l.LINE_ID as lineId,
+        l.HEADER_ID as headerId,
+        l.LINE_NUMBER as lineNumber,
+        l.INVENTORY_ITEM_ID as INVENTORYITEMID,
+        l.ORDERD_QUANTITY as ORDERDQUANTITY,
+        l.ORDER_QUANTITY_UOM as ORDERQUANTITYUOM,
+        l.UNIT_SELLING_PRICE as UNITSELLINGPRICE ,
+        l.DESCRIPTION,
+        l.COMPANY_ID as COMPANY_ID ,
+        l.ADDITION1,
+        l.ADDITION2,
+        l.ADDITION3,
+        l.ADDITION4,
+        l.ADDITION5,
+        i.ITEM_CODE as ITEMCODE,
+        i.ITEM_DESCRIPTION as ITEMDESCRIPTION
+        FROM
+        hap_om_order_lines l
+        INNER JOIN hap_inv_inventory_items i ON l.INVENTORY_ITEM_ID = i.INVENTORY_ITEM_ID
+        WHERE 1=1
+        <if test="headerId!=null">
+            AND l.HEADER_ID=#{headerId}
+        </if>
+    </select>
+
+</mapper>

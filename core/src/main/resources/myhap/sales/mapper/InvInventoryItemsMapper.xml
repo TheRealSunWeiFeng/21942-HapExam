@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="myhap.sales.mapper.InvInventoryItemsMapper">
+    <resultMap id="BaseResultMap" type="myhap.sales.dto.InvInventoryItems">
+        <result column="INVENTORY_ITEM_ID" property="inventoryItemId" jdbcType="DECIMAL" />
+        <result column="ITEM_CODE" property="itemCode" jdbcType="VARCHAR" />
+        <result column="ITEM_UOM" property="itemUom" jdbcType="VARCHAR" />
+        <result column="ITEM_DESCRIPTION" property="itemDescription" jdbcType="VARCHAR" />
+        <result column="ORDER_FLAG" property="orderFlag" jdbcType="VARCHAR" />
+        <result column="START_ACTIVE_DATE" property="startActiveDate" jdbcType="DATE" />
+        <result column="END_ACTIVE_DATE" property="endActiveDate" jdbcType="DATE" />
+        <result column="ENABLED_FLAG" property="enabledFlag" jdbcType="VARCHAR" />
+    </resultMap>
+    <select id="selectLovInvInventoryItems" resultMap="BaseResultMap">
+        SELECT
+        INVENTORY_ITEM_ID,
+        ITEM_CODE,
+        ITEM_DESCRIPTION,
+        ORDER_FLAG,
+        START_ACTIVE_DATE,
+        END_ACTIVE_DATE,
+        ENABLED_FLAG
+        FROM
+        hap_inv_inventory_items
+        WHERE 1=1
+        <if test="inventoryItemId!=null and !''.equals(inventoryItemId) ">
+            AND INVENTORY_ITEM_ID=#{inventoryItemId}
+        </if>
+        <if test="itemDescription!=null and !''.equals(itemDescription) ">
+            AND ITEM_DESCRIPTION=#{itemDescription}
+        </if>
+    </select>
+
+
+    <select id="selectInvInventoryItemById" resultMap="BaseResultMap">
+        SELECT
+        INVENTORY_ITEM_ID,
+        ITEM_CODE,
+        ITEM_DESCRIPTION,
+        ORDER_FLAG,
+        START_ACTIVE_DATE,
+        END_ACTIVE_DATE,
+        ENABLED_FLAG
+        FROM
+        hap_inv_inventory_items
+        WHERE INVENTORY_ITEM_ID=#{invInventoryItemId}
+    </select>
+
+    <select id="selectLovInvInventoryItemsForOrderLines" resultMap="BaseResultMap">
+        SELECT
+        INVENTORY_ITEM_ID,
+        ITEM_CODE,
+        ITEM_UOM,
+        ITEM_DESCRIPTION,
+        ORDER_FLAG,
+        START_ACTIVE_DATE,
+        END_ACTIVE_DATE,
+        ENABLED_FLAG
+        FROM
+        hap_inv_inventory_items
+        WHERE ORDER_FLAG='Y'
+        <if test="inventoryItemId!=null and !''.equals(inventoryItemId) ">
+            AND INVENTORY_ITEM_ID=#{inventoryItemId}
+        </if>
+        <if test="itemCode!=null and !''.equals(itemCode) ">
+            AND ITEM_CODE=#{itemCode}
+        </if>
+    </select>
+
+
+</mapper>

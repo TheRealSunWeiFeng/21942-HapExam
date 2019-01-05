@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="myhap.sales.mapper.OmOrderHeadersMapper">
+    <resultMap id="BaseResultMap" type="myhap.sales.dto.OmOrderHeaders">
+        <result column="HEADER_ID" property="headerId" jdbcType="DECIMAL" />
+        <result column="ORDER_NUMBER" property="orderNumber" jdbcType="VARCHAR" />
+        <result column="COMPANY_ID" property="companyId" jdbcType="DECIMAL" />
+        <result column="ORDER_DATE" property="orderDate" jdbcType="DATE" />
+        <result column="ORDER_STATUS" property="orderStatus" jdbcType="VARCHAR" />
+        <result column="CUSTOMER_ID" property="customerId" jdbcType="DECIMAL" />
+    </resultMap>
+    <select id="selectWithForgeinKey" resultMap="BaseResultMap">
+        SELECT
+        header.header_id AS headerId,
+        header.order_number AS orderNumber,
+        header.order_date AS orderDate,
+        header.order_status AS orderStatus,
+        company.company_id AS companyId,
+        company.company_name AS companyName,
+        customer.customer_id AS customerId,
+        customer.customer_name AS customerName,
+        ( SELECT sum( ORDERD_QUANTITY * UNIT_SELLING_PRICE ) FROM hap_om_order_lines line WHERE header_id =
+        header.HEADER_ID ) AS orderAmount
+        FROM
+        hap_om_order_headers header
+        INNER JOIN hap_ar_customers customer ON header.customer_id =customer.customer_id
+        INNER JOIN hap_org_companys company ON header.company_id = company.company_id
+        WHERE
+        1 =1
+        <if test="headerId != null and headerId !=''">
+            AND header.header_id=#{headerId}
+        </if>
+        <if test="customerId != null and customerId !=''">
+            AND header.customer_id=#{customerId}
+        </if>
+        <if test="companyId != null and companyId !=''">
+            AND header.company_id=#{companyId}
+        </if>
+        <if test="orderNumber != null and orderNumber !=''">
+            AND header.order_number=#{orderNumber}
+        </if>
+        <if test="orderStatus != null and orderStatus !=''">
+            AND header.order_status=#{orderStatus}
+        </if>
+        <if test="inventoryItemId != null and inventoryItemId !=''">
+            AND header.header_id IN ( SELECT l.header_id FROM hap_om_order_headers h INNER JOIN hap_om_order_lines l ON
+            l.HEADER_ID = h.HEADER_ID AND l.INVENTORY_ITEM_ID = #{inventoryItemId} );
+        </if>
+    </select>
+
+
+</mapper>
