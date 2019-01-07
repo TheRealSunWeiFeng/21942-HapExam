@@ -5,6 +5,11 @@
 <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"
         integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
         crossorigin="anonymous"></script>
+<script src="${base.contextPath}/common/profile?userRuleSubmit=HAP_OM_ORDER_SUBMIT_CTL" type="text/javascript"></script>
+<script src="${base.contextPath}/common/profile?userRuleApprove=HAP_OM_ORDER_APPROVE_CTL" type="text/javascript"></script>
+
+
+
 <script type="text/javascript">
     //使用FreeMarker获取订单头ID 默认为0
     var headerId = '${RequestParameters.headerId!0}';
@@ -185,6 +190,10 @@
             }
         },
         back: function () {
+            // alert(userRuleSubmit == 'Y');
+            // alert(userRuleApprove == 'Y');
+            // alert(userRuleApprove);
+
             var parent = window.parent;
             if (parent == window) {
                 return;
@@ -666,6 +675,16 @@
                 $("#customerNameLov").data("kendoLov").text(row["customerName"]);
                 $("#companyNameLov").data("kendoLov").text(row["companyName"]);
                 changeButtonStatus();
+                if(userRuleSubmit != 'Y'){
+                    $("#submitBtn").attr("disabled", "disabled");
+                    $("#submitBtn").removeAttr("onclick");
+                }
+                if(userRuleApprove != 'Y'){
+                    $("#approvalBtn").attr("disabled", "disabled");
+                    $("#approvalBtn").removeAttr("onclick");
+                    $("#rejectBtn").attr("disabled", "disabled");
+                    $("#rejectBtn").removeAttr("onclick");
+                }
             }
         });
 
